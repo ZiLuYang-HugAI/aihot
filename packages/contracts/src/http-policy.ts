@@ -1,5 +1,9 @@
 // Outward HTTP behaviour, defined once: CORS, cache lifetimes, redirects and which process owns a path.
 // The API server and the web server both read this module.
+import { SITE } from "@aihot/industry/site";
+
+/** Agent Skill files live under /<agentSkillName>-skill (industry/site.ts). */
+const SKILL_PATH = SITE.agentSkillName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** CORS for /api/v1/* and /openapi-v1.json. */
 export const PUBLIC_API_CORS: Record<string, string> = {
@@ -115,6 +119,7 @@ export const API_OWNED_PATTERNS: RegExp[] = [
   /^\/(llms\.txt|robots\.txt|sitemap\.xml|manifest\.webmanifest)$/,
   /^\/sitemaps\//,
   /^\/\.well-known\//,
+  new RegExp(`^/${SKILL_PATH}-skill/`),
   /^\/(favicon\.ico|icon\.png|icon-192\.png|apple-icon\.png|logo\.svg)$/,
   /^\/(model-providers|leaderboard-sources|og|contact)\//,
   /^\/[0-9a-f]{32}\.txt$/,

@@ -16,6 +16,8 @@ const MACHINE: Array<[path: string, type: RegExp]> = [
   ["/feed.xml", /xml/],
   ["/feed/all.xml", /xml/],
   ["/llms.txt", /text\/plain/],
+  [`/${SITE.agentSkillName}-skill/manifest.sha256`, /text\/plain/],
+  [`/${SITE.agentSkillName}-skill/SKILL.md`, /text\/plain/],
   ["/robots.txt", /text\/plain/],
   ["/sitemap.xml", /xml/],
   ["/manifest.webmanifest", /manifest/],

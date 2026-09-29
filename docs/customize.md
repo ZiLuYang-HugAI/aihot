@@ -106,7 +106,17 @@
 - `pages/terms.md`、`pages/privacy.md`：使用规则和隐私说明。**现在是模板**，上线前按你的实际情况改写，必要时请专业人士看一下。
 - `changelog.json`：更新日志。新条目写在最前面，把 `latestVersion` 改成它的日期和时间。
 
-## 9. 模型和部署
+## 9. Agent Skill：`industry/skill/`
+
+`/agent` 页的「Agent Skill」标签页把这份安装包发给用户的 Agent：
+
+- `SKILL.md`、`references/`、`agents/openai.yaml`：Skill 正文、API 参考和触发说明，分类要和 `taxonomy.ts` 对上。
+- `install.sh`、`README.md`：安装脚本和人类说明。
+- 文件里的 `{{siteUrl}}` 和 `{{skillName}}` 由后端在发送时替换成 `SITE_URL` 和 `industry/site.ts` 的 `agentSkillName`；`manifest.sha256` 按替换后的内容现算，不用手写。
+
+改了 `agentSkillName` 或站名，要同步改这里的文案。`SKILL.md` frontmatter 里的 `version` 会显示在 `/agent` 页上。
+
+## 10. 模型和部署
 
 - 模型：`.env` 里的 `LLM_BASE_URL`、`LLM_API_KEY`、`LLM_MODEL`，任何 OpenAI 兼容接口都行，所有步骤默认都用它。想让某一步用别家模型，见 `.env.example`。
 - 部署：见 [部署](deploy.md)。

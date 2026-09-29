@@ -1,5 +1,6 @@
 // Discovery and static files: sitemap, llms.txt, robots, security.txt, the web manifest, the OpenAPI
-// document, icons, the IndexNow key, leaderboard logos and the about page's contact codes.
+// document, icons, the IndexNow key, leaderboard logos, the about page's contact codes and the
+// Agent Skill package.
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -15,6 +16,31 @@ import { llmsTxt, loadLlmsAvailability } from "@aihot/backend/publication/llms";
 const REF = path.join(REPO_ROOT, "reference");
 const ASSETS = path.join(REPO_ROOT, "assets");
 const BRAND = path.join(REPO_ROOT, "industry/brand");
+const SKILL = path.join(REPO_ROOT, "industry/skill");
+
+/** The Agent Skill package (industry/skill/), served at the path install.sh expects. */
+const SKILL_ROOT = `/${SITE.agentSkillName}-skill`;
+/** Files install.sh downloads and checksums; the rest of the package is human-facing. */
+const SKILL_RUNTIME_FILES = ["SKILL.md", "LICENSE", "agents/openai.yaml", "references/api.md", "references/sync.md", "references/errors.md"] as const;
+const SKILL_EXTRA_FILES = new Set(["README.md", "install.sh"]);
+
+/**
+ * Skill sources are templates; the deployment address and the Skill name are filled in when a file is
+ * served, so the same package works on localhost and on the public domain. The manifest is hashed over
+ * the served bytes.
+ */
+function skillContent(raw: string): string {
+  return raw.replaceAll("{{siteUrl}}", config.siteUrl).replaceAll("{{skillName}}", SITE.agentSkillName);
+}
+
+async function readSkill(file: string): Promise<string | null> {
+  if (!(SKILL_RUNTIME_FILES as readonly string[]).includes(file) && !SKILL_EXTRA_FILES.has(file)) return null;
+  try {
+    return skillContent(await readFile(path.join(SKILL, file), "utf8"));
+  } catch {
+    return null;
+  }
+}
 
 const TYPES: Record<string, string> = {
   ".json": "application/json; charset=UTF-8",
@@ -58,6 +84,7 @@ function robotsTxt(): string {
     "User-agent: *",
     "Allow: /api/v1/",
     "Allow: /api/mcp",
+    `Allow: ${SKILL_ROOT}/`,
     "Disallow: /api/",
     "Disallow: /admin/",
     "Disallow: /starred",
@@ -171,5 +198,28 @@ export function registerStatic(app: FastifyInstance) {
     const uploaded = path.join(config.dataDir, "uploads", file);
     const target = (await stat(uploaded).then(() => true, () => false)) ? uploaded : path.join(BRAND, "contact", file);
     return sendFile(req, reply, target, { cacheControl });
+  });
+
+  // The Agent Skill. The manifest hashes the served (address-filled) bytes, so install.sh's checksum
+  // check passes on any domain. README.md and install.sh are served but stay out of the runtime package.
+  app.get(`${SKILL_ROOT}/manifest.sha256`, async (req, reply) => {
+    const lines = await Promise.all(
+      SKILL_RUNTIME_FILES.map(async (file) => {
+        const body = await readSkill(file);
+        if (body === null) throw new Error(`missing skill file ${file}`);
+        return `${createHash("sha256").update(body).digest("hex")}  ${file}`;
+      }),
+    );
+    applyPublicHeaders(reply, { cors: false });
+    return sendTextWithEtag(req, reply, `${lines.join("\n")}\n`, { etagPrefix: "skill-manifest", cacheControl: "public, max-age=0, s-maxage=300, must-revalidate", contentType: "text/plain; charset=utf-8" });
+  });
+
+  app.get(`${SKILL_ROOT}/*`, async (req, reply) => {
+    const file = decodeURIComponent((req.params as { "*": string })["*"] ?? "");
+    const body = await readSkill(file);
+    if (body === null) return reply.code(404).type("text/plain; charset=utf-8").send("Not found");
+    applyPublicHeaders(reply, { cors: false });
+    const contentType = file.endsWith(".yaml") ? "text/yaml; charset=utf-8" : "text/plain; charset=utf-8";
+    return sendTextWithEtag(req, reply, body, { etagPrefix: `skill-${file.replace(/\W+/g, "-")}`, cacheControl: "public, max-age=0, s-maxage=300, must-revalidate", contentType });
   });
 }

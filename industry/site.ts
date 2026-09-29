@@ -25,6 +25,11 @@ export const SITE = {
    * 已经有人接入后就不要再改。
    */
   mcpPrefix: "poweraihot",
+  /**
+   * Agent Skill 的名字（小写字母、数字、连字符）：安装目录名、SKILL.md 的 name 和 /<名字>-skill 路径都用它。
+   * 已经有人安装后就不要再改。
+   */
+  agentSkillName: "poweraihot",
   /** 对外联系邮箱（选填）：使用规则、llms.txt、响应头里会写。 */
   contactEmail: null as string | null,
   /** 页脚的一行小字（选填）。 */

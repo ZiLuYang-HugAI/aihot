@@ -5,6 +5,7 @@
   "exports": {
     "./pages/*": "./pages/*",
     "./brand/*": "./brand/*",
+    "./skill/*": "./skill/*",
     "./*": "./*.ts"
   }
 }
