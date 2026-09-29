@@ -1,5 +1,6 @@
 // Names, dates and grouping for daily, weekly and monthly reports.
 import type { ReportNavigationEntry, ReportKind } from "@aihot/contracts/site";
+import { withSubject } from "@aihot/industry/site";
 import { beijingWeekday } from "../../lib/format";
 
 export const KINDS: ReportKind[] = ["daily", "weekly", "monthly"];
@@ -33,11 +34,12 @@ export function monthRange(key: string): [string, string] {
   return [`${key}-01`, ymd(new Date(Date.UTC(y, m, 0)))];
 }
 
-/** "这一天的 4 件 AI 大事" / "本周的 12 件 AI 大事" / "8 月的 20 件 AI 大事". */
+/** "这一天的 4 件电力大事" / "本周的 12 件电力大事" / "8 月的 20 件电力大事". */
 export function headline(kind: ReportKind, key: string, count: number): string {
-  if (kind === "daily") return `这一天的 ${count} 件 AI 大事`;
-  if (kind === "weekly") return `本周的 ${count} 件 AI 大事`;
-  return `${Number(key.slice(5, 7))} 月的 ${count} 件 AI 大事`;
+  const events = withSubject("大事");
+  if (kind === "daily") return `这一天的 ${count} 件 ${events}`;
+  if (kind === "weekly") return `本周的 ${count} 件 ${events}`;
+  return `${Number(key.slice(5, 7))} 月的 ${count} 件 ${events}`;
 }
 
 /** "09.16" for a story inside a week or month. */
@@ -164,7 +166,7 @@ export function dateLine(kind: ReportKind, key: string): string {
 }
 
 /** What each kind is, under its nameplate. */
-export const MOTTO: Record<ReportKind, string> = { daily: "人工智能 · 每日要闻", weekly: "人工智能 · 每周综述", monthly: "人工智能 · 每月盘点" };
+export const MOTTO: Record<ReportKind, string> = { daily: withSubject("要闻"), weekly: withSubject("综述"), monthly: withSubject("盘点") };
 
 export interface PeriodCell {
   key: string | null;

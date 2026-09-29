@@ -62,6 +62,7 @@ export const UNDERSTAND_FLOOR = SELECTION.understandFloor;
  */
 const SCORE_CALL: Record<string, { temperature: number; maxTokens: number; timeoutMs: number }> = {
   "glm-5.3-flash-selection": { temperature: 1, maxTokens: 65_536, timeoutMs: 180_000 },
+  "glm-5.1-selection": { temperature: 1, maxTokens: 65_536, timeoutMs: 180_000 },
 };
 const scoreCall = (model: string) => SCORE_CALL[model] ?? { temperature: 0.2, maxTokens: 1024, timeoutMs: 120_000 };
 

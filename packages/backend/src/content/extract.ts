@@ -5,7 +5,7 @@ import { parseHTML } from "linkedom";
 import { sql } from "../db.ts";
 import { guardedFetch } from "../lib/http-fetch.ts";
 import { collapseWhitespace, stripTags } from "../lib/text.ts";
-import { jinaRead } from "../providers/jina.ts";
+import { jinaConfigured, jinaRead } from "../providers/jina.ts";
 import { BudgetExceededError } from "../providers/receipts.ts";
 import { getArticle } from "../providers/socialdata.ts";
 import { onlyXArticleLink, xArticleText } from "../sources/x.ts";
@@ -23,6 +23,13 @@ const MIN_BODY_CHARS = 200;
 
 export function readable(html: string, url: string): ExtractedBody | null {
   const { document } = parseHTML(html);
+  // A page that opens with a <script> before <head> (cpnn puts its analytics tag there) makes
+  // linkedom strand the parsed content under a second <body> that document.body does not point at:
+  // Readability then reads an empty page and every such article stays "unconfirmed".
+  const treeBody = document.querySelector("body");
+  if (treeBody && document.body && treeBody !== document.body) {
+    for (const child of [...treeBody.childNodes]) document.body.appendChild(child);
+  }
   try {
     const base = document.createElement("base");
     base.setAttribute("href", url);
@@ -36,14 +43,23 @@ export function readable(html: string, url: string): ExtractedBody | null {
   const text = stripTags(clean);
   if (text.length < MIN_BODY_CHARS) return null;
   const images: ExtractedBody["images"] = [];
-  for (const m of clean.matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)) {
-    const w = /\bwidth="(\d+)"/.exec(m[0]);
-    const h = /\bheight="(\d+)"/.exec(m[0]);
-    images.push({ kind: "image", url: m[1]!.replace(/&amp;/g, "&"), width: w ? Number(w[1]) : null, height: h ? Number(h[1]) : null });
+  const seen = new Set<string>();
+  // \ssrc= (not \bsrc=) so a `data-src` placeholder is never mistaken for the real image.
+  for (const m of clean.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = m[0];
+    const src = /\ssrc="([^"]*)"/i.exec(tag)?.[1]?.replace(/&amp;/g, "&") ?? "";
+    if (!/^https?:\/\//i.test(src) || NON_CONTENT_IMAGE.test(src) || seen.has(src)) continue;
+    seen.add(src);
+    const w = /\bwidth="(\d+)"/.exec(tag);
+    const h = /\bheight="(\d+)"/.exec(tag);
+    images.push({ kind: "image", url: src, width: w ? Number(w[1]) : null, height: h ? Number(h[1]) : null });
     if (images.length >= 12) break;
   }
   return { html: clean, text, images, via: "readability" };
 }
+
+/** A placeholder or chrome image, never a picture of the article: data URIs, WordPress emoji sprites. */
+const NON_CONTENT_IMAGE = /^(?:data:|https?:\/\/s\.w\.org\/)|\/images\/core\/emoji\//i;
 
 function markdownToHtml(md: string): string {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -79,7 +95,8 @@ export async function extractFromUrl(url: string, opts: { allowJina: boolean; su
   } catch {
     // fall through to Jina
   }
-  if (!opts.allowJina) return null;
+  // No key means no fallback: the page stays "unconfirmed" rather than failing the job.
+  if (!opts.allowJina || !jinaConfigured()) return null;
   try {
     const page = await jinaRead(url, { purpose: "body_fallback", subject: opts.subject });
     const html = trimTrailingChrome(sanitizeBody(markdownToHtml(page.markdown), url));

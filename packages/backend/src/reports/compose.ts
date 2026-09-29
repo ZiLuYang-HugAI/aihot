@@ -4,6 +4,7 @@
 import { z } from "zod";
 import { SITE } from "@aihot/industry/site";
 import { CATEGORIES } from "@aihot/industry/taxonomy";
+import { STALE_ON_DISCOVERY_MS } from "../content/materials.ts";
 import { promptText, promptVersion } from "../editorial/prompts.ts";
 import { modelFor } from "../editorial/models.ts";
 import { addDays, beijingDate, beijingMidnight, isoWeekLabel, isoWeekRange } from "@aihot/contracts/time";
@@ -47,6 +48,10 @@ function roleOf(kind: string, firstParty: boolean): string {
 }
 
 export async function candidates(start: Date, end: Date): Promise<Candidate[]> {
+  // History, not news: a backfill is excluded only when it was already stale when found. A new source's
+  // item from the last 48 hours is news (same rule as event grouping and the home timeline).
+  // The release gate is checked against `now()`, not the window end: on-time runs are identical, and a
+  // catch-up run can cover items that were released after their window closed (e.g. a fresh archive).
   const rows = await sql<{
     id: string; title: string; summary: string | null; url: string; category: string | null; score: number | null; first_party: boolean;
     source_id: string; source_name: string; source_kind: string; fact_public_id: string | null; story_public_id: string | null; at: Date; backfill: boolean;
@@ -55,8 +60,10 @@ export async function candidates(start: Date, end: Date): Promise<Candidate[]> {
            s.kind AS source_kind, f.public_id AS fact_public_id, st.public_id::text AS story_public_id, p.timeline_at AS at, p.backfill
     FROM publications p JOIN sources s ON s.id = p.source_id
     LEFT JOIN facts f ON f.id = p.fact_id LEFT JOIN stories st ON st.id = f.story_id
-    WHERE p.visibility = 'public' AND p.selected AND NOT p.backfill AND p.timeline_at >= ${start} AND p.timeline_at < ${end}
-      AND p.visible_after <= ${end}`;
+    WHERE p.visibility = 'public' AND p.selected
+      AND (NOT p.backfill OR p.discovered_at - p.published_at <= make_interval(secs => ${STALE_ON_DISCOVERY_MS / 1000}))
+      AND p.timeline_at >= ${start} AND p.timeline_at < ${end}
+      AND p.visible_after <= now()`;
   // One entry per fact: first-party first, then score.
   const byFact = new Map<string, Candidate>();
   for (const r of rows) {

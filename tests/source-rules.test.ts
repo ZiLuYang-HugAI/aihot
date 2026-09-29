@@ -16,6 +16,7 @@ const T = tag();
 const LONG = `${"A card label that swallowed the summary of the article it links to, ".repeat(2)}${T}`;
 let jinaDetailReads = 0;
 let jinaListingReads = 0;
+let feedLeadImage = "";
 const pageReads = new Map<string, number>();
 const ARTICLE_BODY = "A complete article with enough material to preserve the same extraction result without downloading it twice. ".repeat(6);
 const html = (head: string, body: string) => `<html><head>${head}</head><body>${body}</body></html>`;
@@ -24,6 +25,10 @@ const pages: Record<string, (base: string) => string> = {
     `<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>` +
     ["news/a", "business/b"].map((p) => `<item><title>Entry ${p} ${T}</title><link>https://example.org/rules-${T}/${p}</link><pubDate>${new Date().toUTCString()}</pubDate></item>`).join("") +
     `</channel></rss>`,
+  "/media-feed.xml": () =>
+    `<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>` +
+    `<item><title>Lead image later ${T}</title><link>https://example.org/media-${T}/a</link><pubDate>${new Date().toUTCString()}</pubDate>` +
+    `${feedLeadImage ? `<enclosure url="${feedLeadImage}" />` : ""}</item></channel></rss>`,
   "/list.html": () => html("", `<ul><li><a href="/p/a-${T}">Short clean title ${T}</a><time>2026-09-20</time></li><li><a href="/p/b-${T}">${LONG}</a></li></ul>`),
   [`/p/a-${T}`]: () =>
     html(`<meta name="description" content="Summary of A"><meta property="article:published_time" content="2026-01-01T00:00:00Z">`, `<h1>Detail heading A</h1><p class="byline"><time datetime="2026-09-21T08:00:00Z">Sep 21</time></p>`),
@@ -64,6 +69,7 @@ const SOURCES = {
     },
   },
   jina: { kind: "web_list", config: { url: `https://r.jina.ai/${base}/jlist-${T}`, parseMode: "markdown", allowUrlPrefixes: [`${base}/j/`], detail: { maxFetches: 5, titleRegex: "^# (.+)$" } } },
+  mediafill: { kind: "rss", config: { feedUrl: `${base}/media-feed.xml` } },
 };
 const id = (name: keyof typeof SOURCES) => `test-rules-${name}-${T}`;
 let savedJina: Array<{ per_minute: number; per_hour: number; per_day: number }> = [];
@@ -136,4 +142,34 @@ test("detail HTML supplies the ordinary extracted body once, while short pages k
   assert.deepEqual([full!.body_html, full!.body_text, full!.body_status], [expected.html, expected.text, "ok"]);
   assert.equal(await extractArticleBody(full!.id, false), "skipped");
   assert.equal(pageReads.get(`/p/b-${T}`), 1, "known listings and extraction never download the same confirmed body again");
+});
+
+test("a page that opens with a script before <head> is read, and only real lead images are kept", () => {
+  // cpnn puts its analytics <script> before <head>: linkedom then stranded the parsed body and every
+  // such article stayed "unconfirmed" even though the page carried the whole article.
+  const paragraph = "工业和信息化部组织召开新型储能产业发展座谈会，围绕质量提升、标准体系建设和行业规范管理听取意见建议。".repeat(8);
+  const page =
+    `<!DOCTYPE html><html lang="en"><script>var _hmt=_hmt||[];</script><head><title>t</title></head><body>` +
+    `<div class="main"><div class="list"><p>${paragraph}</p>` +
+    `<img src="https://example.org/lead.jpg" width="499" height="396"><img src="https://example.org/lead.jpg">` +
+    `<img src="data:image/svg+xml;base64,PHN2Zz48L3N2Zz4="><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2122.png">` +
+    `</div></div></body></html>`;
+  const got = readable(page, "https://example.org/a")!;
+  assert.equal(got.text.length, paragraph.length);
+  assert.deepEqual(got.images, [{ kind: "image", url: "https://example.org/lead.jpg", width: 499, height: 396 }],
+    "one real lead image: a repeat, a data URI and a WordPress emoji sprite are not pictures of the article");
+});
+
+test("a lead image the feed carries only later fills a row that had none, without a revision", async () => {
+  const first = await collectSource(id("mediafill"), { force: true });
+  assert.equal(first.status, "ok");
+  const [before] = await sql<{ id: string; revision: number; media: unknown[] }[]>`
+    SELECT id, revision, media FROM articles WHERE source_id = ${id("mediafill")}`;
+  assert.equal(before!.media.length, 0);
+  feedLeadImage = "https://example.org/fill.jpg";
+  assert.equal((await collectSource(id("mediafill"), { force: true })).status, "ok");
+  const [after] = await sql<{ revision: number; media: unknown[] }[]>`
+    SELECT revision, media FROM articles WHERE id = ${before!.id}`;
+  assert.deepEqual(after!.media, [{ kind: "image", url: "https://example.org/fill.jpg" }]);
+  assert.equal(after!.revision, before!.revision, "a picture is not a new version of the text");
 });

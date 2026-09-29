@@ -52,6 +52,8 @@ function atomLink(links: unknown): string {
   return typeof first === "string" ? first : first?.["@href"] ?? "";
 }
 
+const IMAGE_URL = /\.(?:jpe?g|png|gif|webp|avif|bmp|svg)(?:[?#]|$)/i;
+
 function imagesFrom(html: string, base: string): Array<{ kind: "image"; url: string }> {
   const out: Array<{ kind: "image"; url: string }> = [];
   for (const m of html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)) {
@@ -157,7 +159,11 @@ export async function fetchRss(source: SourceRow, opts: { force?: boolean } = {}
       const description = text(it.description);
       const bodyHtmlRaw = contentEncoded || (summaryIsBody ? description : "");
       const bodyHtml = bodyHtmlRaw ? sanitizeBody(bodyHtmlRaw, link) : null;
-      const enclosure = arr(it.enclosure as Record<string, string> | Array<Record<string, string>>).find((e) => /^image\//.test(e?.["@type"] ?? ""));
+      // Some feeds (energy-storage.news) ship the lead image as an untagged <enclosure url="…">,
+      // so fall back to the address when the type is missing. A typed non-image is still not one.
+      const enclosure = arr(it.enclosure as Record<string, string> | Array<Record<string, string>>).find(
+        (e) => !!e?.["@url"] && (/^image\//.test(e["@type"] ?? "") || (!e["@type"] && IMAGE_URL.test(e["@url"]))),
+      );
       const media = [
         ...(enclosure ? [{ kind: "image" as const, url: enclosure["@url"]! }] : []),
         ...(bodyHtmlRaw ? imagesFrom(bodyHtmlRaw, link) : []),

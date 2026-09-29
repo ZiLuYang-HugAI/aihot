@@ -180,7 +180,7 @@ export default function StoryPage() {
   }, [story.timeline, filter, order]);
   const newest = story.timeline.reduce<StoryReportView | null>((a, b) => (!a || Date.parse(b.publishedAt) > Date.parse(a.publishedAt) ? b : a), null);
   const overview = story.digest
-    ? { label: "AI 综述", text: story.digest, note: story.digestUpdatedAt ? `AI 根据报道生成 · ${relativeTime(story.digestUpdatedAt)}更新` : "AI 根据报道生成" }
+    ? { label: withSubject("综述"), text: story.digest, note: story.digestUpdatedAt ? `由模型根据报道生成 · ${relativeTime(story.digestUpdatedAt)}更新` : "由模型根据报道生成" }
     : story.summary
       ? { label: "事实说明", text: story.summary, note: null }
       : story.excerpt

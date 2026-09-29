@@ -164,7 +164,8 @@ export function leadItemOf(leadTitle: string | undefined, highlights: ReportCita
 
 /**
  * A picture for the front page's lead item: its own first sizeable image, else one from another public
- * report of the same event (first-hand first). Items shown as summaries only lend no pictures.
+ * report of the same event (first-hand first). The site shows the picture even when it only carries that
+ * source's summary, so the gate is the source's public eligibility, not its full-text licence.
  */
 async function leadCover(itemId: string): Promise<{ url: string; srcSet?: string; width: number | null; height: number | null } | null> {
   const [row] = await sql<{ m: { url: string; width?: number; height?: number } }[]>`
@@ -175,7 +176,7 @@ async function leadCover(itemId: string): Promise<{ url: string; srcSet?: string
       WHERE m->>'kind' = 'image' AND coalesce((m->>'width')::numeric, 800) >= 480 LIMIT 1
     ) img
     WHERE (p.article_id = ${itemId} OR p.story_id = (SELECT story_id FROM publications WHERE article_id = ${itemId}))
-      AND p.visibility = 'public' AND p.eligible AND p.body_mode <> 'summary'
+      AND p.visibility = 'public' AND p.eligible
     ORDER BY (p.article_id = ${itemId}) DESC, p.first_party DESC, coalesce(p.score, 0) DESC, p.article_id
     LIMIT 1`;
   if (!row) return null;

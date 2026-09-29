@@ -28,7 +28,7 @@ export const SIDEBAR: Array<{ title: string; items: NavItem[] }> = [
       { to: "/starred", label: "收藏", icon: IconBookmark },
     ],
   },
-  // The optional AI-only modules (industry/features.ts).
+  // The optional feature modules (industry/features.ts).
   ...(FEATURES.leaderboard || FEATURES.codexResetMonitor
     ? [
         {

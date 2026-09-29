@@ -1,386 +1,605 @@
 {
-  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里增删改。字段说明见 docs/customize.md。",
+  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里增删改。字段说明见 docs/customize.md。海外部分用 RSS；国内部分用 web_list 抓可直连的页面（北极星等大站有 WAF 验证码，抓不到；公众号需要极致了 key）。上线请换成你自己盯的信源。",
   "sources": [
     {
-      "id": "rss-openai-news",
-      "name": "OpenAI News",
+      "id": "rss-us-doe",
+      "name": "U.S. Department of Energy",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://openai.com/news/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "openai",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-deepmind",
-      "name": "Google DeepMind",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://deepmind.google/blog/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-research",
-      "name": "Google Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://research.google/blog/rss/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-hugging-face",
-      "name": "Hugging Face Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://huggingface.co/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "hugging-face",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "开源"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-microsoft-research",
-      "name": "Microsoft Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.microsoft.com/en-us/research/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "microsoft",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-nvidia-blog",
-      "name": "NVIDIA Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://blogs.nvidia.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "nvidia",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-aws-ml",
-      "name": "AWS Machine Learning Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.energy.gov/rss.xml", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T1",
       "first_party": true,
       "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "教程"
-      ],
+      "interval_minutes": 720,
+      "tags": ["官方"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-github-ai",
-      "name": "GitHub Blog · AI & ML",
+      "id": "rss-uk-desnz",
+      "name": "UK DESNZ",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://github.blog/ai-and-ml/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero.atom", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T1",
       "first_party": true,
       "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
+      "interval_minutes": 720,
+      "tags": ["官方", "政策"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-mistral",
-      "name": "Mistral AI",
+      "id": "rss-world-nuclear-news",
+      "name": "World Nuclear News",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://mistral.ai/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
+      "config": { "feedUrl": "https://www.world-nuclear-news.org/rss", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1_5",
+      "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
+      "interval_minutes": 240,
+      "tags": ["行业媒体", "核电"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-bair",
-      "name": "Berkeley AI Research",
+      "id": "rss-utility-dive",
+      "name": "Utility Dive",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://bair.berkeley.edu/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-the-verge-ai",
-      "name": "The Verge · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.utilitydive.com/feeds/news/", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T2",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
+      "tags": ["媒体"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-techcrunch-ai",
-      "name": "TechCrunch · AI",
+      "id": "rss-pv-magazine",
+      "name": "pv magazine",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "first_party": false,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-ars-technica-ai",
-      "name": "Ars Technica · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://arstechnica.com/ai/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "first_party": false,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mit-tech-review-ai",
-      "name": "MIT Technology Review · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.pv-magazine.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T2",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 120,
-      "tags": [
-        "媒体"
-      ],
+      "tags": ["媒体", "光伏"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-the-decoder",
-      "name": "The Decoder",
+      "id": "rss-pv-tech",
+      "name": "PV Tech",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://the-decoder.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "first_party": false,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-simon-willison",
-      "name": "Simon Willison",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://simonwillison.net/atom/everything/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.pv-tech.org/feed/", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T2",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 120,
-      "tags": [
-        "个人"
-      ],
+      "tags": ["媒体", "光伏"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-import-ai",
-      "name": "Import AI",
+      "id": "rss-solar-power-world",
+      "name": "Solar Power World",
       "kind": "rss",
-      "config": {
-        "feedUrl": "https://importai.substack.com/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
+      "config": { "feedUrl": "https://www.solarpowerworldonline.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
       "tier": "T2",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 180,
-      "tags": [
-        "个人",
-        "周刊"
-      ],
+      "tags": ["媒体", "光伏"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-latent-space",
-      "name": "Latent Space",
+      "id": "rss-windpower-engineering",
+      "name": "Windpower Engineering & Development",
       "kind": "rss",
+      "config": { "feedUrl": "https://www.windpowerengineering.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体", "风电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-offshorewind",
+      "name": "Offshore Wind",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.offshorewind.biz/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体", "风电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-storage-news",
+      "name": "Energy-Storage.news",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.energy-storage.news/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-clean-technica",
+      "name": "CleanTechnica",
+      "kind": "rss",
+      "config": { "feedUrl": "https://cleantechnica.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-hydrogen-central",
+      "name": "Hydrogen Central",
+      "kind": "rss",
+      "config": { "feedUrl": "https://hydrogen-central.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体", "氢能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-power-eng",
+      "name": "Power Engineering",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.power-eng.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "发电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-power-technology",
+      "name": "Power Technology",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.power-technology.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ns-energy-business",
+      "name": "NS Energy",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.nsenergybusiness.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-power",
+      "name": "中国能源新闻网 · 新能源",
+      "kind": "web_list",
       "config": {
-        "feedUrl": "https://www.latent.space/feed",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
+        "url": "https://www.cpnn.com.cn/news/xny/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": ["官方媒体", "电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-solarbe-news",
+      "name": "索比光伏网 · 资讯",
+      "kind": "web_list",
+      "config": {
+        "url": "https://news.solarbe.com/",
+        "itemSelector": ".home-content-boxgeneral-list a",
+        "allowUrlPrefixes": ["https://news.solarbe.com/"],
+        "detail": { "maxFetches": 30 },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "光伏", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-storage",
+      "name": "中国储能网 · 国内动态",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/837.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-canary-media",
+      "name": "Canary Media",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.canarymedia.com/rss", "_aihot": { "initialBackfillLimit": 20 } },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "清洁电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-monitor",
+      "name": "Energy Monitor",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.energymonitor.ai/feed/", "_aihot": { "initialBackfillLimit": 20 } },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["行业媒体", "能源转型"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ieee-energy",
+      "name": "IEEE Spectrum · Energy",
+      "kind": "rss",
+      "config": { "feedUrl": "https://spectrum.ieee.org/feeds/topic/energy.rss", "_aihot": { "initialBackfillLimit": 20 } },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 360,
+      "tags": ["技术", "电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-power-grid",
+      "name": "中国能源新闻网 · 电力",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/dianli2023/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": ["官方媒体", "电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-observer",
+      "name": "中国能源新闻网 · 观察",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/zngc/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["官方媒体", "观点"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-industry",
+      "name": "中国储能网 · 产业资讯",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/836.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-industry",
+      "name": "中国能源新闻网 · 行业",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/hy/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["官方媒体", "电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-tech",
+      "name": "中国能源新闻网 · 科技",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/kj/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["官方媒体", "技术"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-local",
+      "name": "中国能源新闻网 · 地方能源",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/dfny/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["官方媒体", "地方"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cpnn-enterprise",
+      "name": "中国能源新闻网 · 企业",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cpnn.com.cn/news/nyqy/",
+        "itemSelector": ".cpnnlist_l ul > li",
+        "linkSelector": "a.fl",
+        "titleSelector": "a.fl",
+        "publishedAtSelector": "b.fr",
+        "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["官方媒体", "企业"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-grid",
+      "name": "中国储能网 · 电网动态",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/841.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "电网"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-generation",
+      "name": "中国储能网 · 发电动态",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/842.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["媒体", "发电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-policy-national",
+      "name": "中国储能网 · 国家政策",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/830.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["政策", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-policy-local",
+      "name": "中国储能网 · 地方政策",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/831.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
       },
       "tier": "T2",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 180,
-      "tags": [
-        "个人"
-      ],
+      "tags": ["政策", "地方"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-observation",
+      "name": "中国储能网 · 产业观察",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/840.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体", "观点"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-escn-global",
+      "name": "中国储能网 · 国际动态",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.escn.com.cn/news/838.html",
+        "itemSelector": "ul.n-onelist > li",
+        "linkSelector": ".nl-title a",
+        "titleSelector": ".nl-title a",
+        "allowUrlPrefixes": ["https://www.escn.com.cn/news/show-"],
+        "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["媒体", "国际"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     }

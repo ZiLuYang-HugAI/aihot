@@ -80,6 +80,44 @@ export const MODELS: Record<string, ModelSpec> = {
     baseUrlEnv: "DASHSCOPE_BASE_URL", apiKeyEnv: "DASHSCOPE_API_KEY",
     extra: { enable_thinking: false }, jsonMode: false, vision: true,
   },
+  // Extra models on this deployment's own endpoint (LLM_BASE_URL / LLM_API_KEY). An aggregator often
+  // serves several model families under one key, so a deployment can split work across them.
+  "qwen3.6-flash": {
+    key: "qwen3.6-flash", service: "llm", model: "qwen3.6-flash",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  "qwen3.7-plus": {
+    key: "qwen3.7-plus", service: "llm", model: "qwen3.7-plus",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  "qwen3.7-max": {
+    key: "qwen3.7-max", service: "llm", model: "qwen3.7-max",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  "deepseek-v4-flash": {
+    key: "deepseek-v4-flash", service: "llm", model: "deepseek-v4-flash",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  "deepseek-v4-pro": {
+    key: "deepseek-v4-pro", service: "llm", model: "deepseek-v4-pro",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  "minimax-m2.7": {
+    key: "minimax-m2.7", service: "llm", model: "minimax-m2.7",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+  },
+  // The scorer: reasoning on, temperature and token budget set per call in editorial/analyze.ts.
+  "glm-5.1-selection": {
+    key: "glm-5.1-selection", service: "llm", model: "glm-5.1",
+    baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "enabled" }, reasoning_effort: "high", top_p: 0.95 }, jsonMode: true,
+  },
 };
 
 export type ContentPart = { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };

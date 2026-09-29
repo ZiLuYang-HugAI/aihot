@@ -44,7 +44,7 @@ function devEdge(): Plugin {
 
 export default defineConfig({
   plugins: [devEdge(), tailwindcss(), reactRouter()],
-  server: { port: 3000, strictPort: true },
+  server: { port: 3000, strictPort: true, allowedHosts: [".monkeycode-ai.online"] },
   build: {
     rolldownOptions: {
       output: {

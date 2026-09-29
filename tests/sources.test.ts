@@ -38,6 +38,12 @@ const pages: Record<string, (cdn: string) => string> = {
     `<content type="html"><![CDATA[<p>${"The feed carries this post whole, paragraph after paragraph. ".repeat(30)}</p>]]></content></entry></feed>`,
   // A list API that gives calendar days as yyyymmdd.
   "/days.json": () => JSON.stringify({ data: { list: [{ seq: 695, ttl: "MCFlow", day: "20260922" }, { seq: 1, ttl: "Bad day", day: "20260230" }] } }),
+  // energy-storage.news ships the lead image as an <enclosure> with no type attribute.
+  "/pwfeed.xml": () =>
+    `<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>` +
+    `<item><title>Untagged lead image</title><link>https://example.org/pw/a</link><pubDate>2026-09-28T00:00:00Z</pubDate><enclosure url="https://example.org/lead.jpg" /></item>` +
+    `<item><title>Audio attachment</title><link>https://example.org/pw/b</link><pubDate>2026-09-28T00:00:00Z</pubDate><enclosure url="https://example.org/clip.mp3" type="audio/mpeg" /></item>` +
+    `</channel></rss>`,
   // Google Developers Blog: no date in the feed or in meta tags, only in JSON-LD.
   "/ld-post": () =>
     `<html><head><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Blog"},` +
@@ -174,6 +180,13 @@ test("feed text that only teases the article is a summary: the page is fetched b
   // Discussion sources only need what the feed says.
   const signal = await fetchRss({ id: "test-feed", config: { feedUrl: `${site}/verge.xml` }, participation_mode: "hot_signal", cursor: null } as never, { force: true });
   assert.equal(signal.candidates[0]!.bodyStatus, "ok");
+});
+
+test("an untagged image enclosure is the lead image; a typed non-image is not", async () => {
+  const read = await fetchRss({ id: "test-feed", config: { feedUrl: `${site}/pwfeed.xml` }, participation_mode: "editorial", cursor: null } as never, { force: true });
+  const [image, audio] = read.candidates;
+  assert.deepEqual(image!.media, [{ kind: "image", url: "https://example.org/lead.jpg" }]);
+  assert.deepEqual(audio!.media, []);
 });
 
 test("hidden page parts are dropped whole, and a news page's closing blocks are trimmed", () => {

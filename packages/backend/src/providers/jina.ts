@@ -11,6 +11,11 @@ export interface JinaPage {
   markdown: string;
 }
 
+/** Whether the Reader key is configured; without it JS-only pages fall back to "unconfirmed". */
+export function jinaConfigured(): boolean {
+  return credential("collectors", "JINA_API_KEY") !== null;
+}
+
 export function parseJinaText(text: string): JinaPage {
   const header = text.split(/\nMarkdown Content:\n/)[0] ?? "";
   const body = text.includes("\nMarkdown Content:\n") ? text.split(/\nMarkdown Content:\n/).slice(1).join("\nMarkdown Content:\n") : text;
