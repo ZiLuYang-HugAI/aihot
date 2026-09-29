@@ -256,16 +256,24 @@ export async function composeMonthly(label: string, reason = "scheduled") {
  * Catch-up: generates any missing daily report for the last `days` days (never the future and never
  * before the first report in the database), the last complete week and the last complete month.
  */
+/** A period comes before the site's launch when its last covered day predates the first daily report. */
+export function isBeforeLaunch(launch: string | null, lastDay: string): boolean {
+  return !!launch && lastDay < launch;
+}
+
 export async function catchUpReports(now = new Date(), days = 7): Promise<{ generated: string[] }> {
   const generated: string[] = [];
   const today = beijingDate(now);
   const bjHour = Number(new Date(now.getTime() + 8 * 3600000).toISOString().slice(11, 13));
   const [first] = await sql<{ key: string | null }[]>`SELECT min(key) AS key FROM reports WHERE kind = 'daily'`;
   const latestDue = bjHour >= 8 ? today : addDays(today, -1);
+  // Nothing before the first daily report: a fresh site has no history to reconstruct, and a missing
+  // slot before it must not come back as an empty issue.
+  const launch = first?.key ?? null;
   for (let i = days - 1; i >= 0; i--) {
     if (shutdownSignal.signal.aborted) return { generated }; // the next hourly run continues
     const d = addDays(latestDue, -i);
-    if (first?.key && d < first.key) continue;
+    if (isBeforeLaunch(launch, d)) continue;
     const [exists] = await sql`SELECT 1 FROM reports WHERE kind = 'daily' AND key = ${d}`;
     if (!exists) {
       await composeDaily(d, "catch-up");
@@ -276,7 +284,8 @@ export async function catchUpReports(now = new Date(), days = 7): Promise<{ gene
   const dow = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
   const lastWeek = isoWeekLabel(addDays(today, -dow - 7));
   const weekDue = dow > 0 || bjHour >= 10;
-  if (weekDue) {
+  const weekRange = isoWeekRange(lastWeek);
+  if (weekDue && (!weekRange || !isBeforeLaunch(launch, weekRange.end))) {
     const [w] = await sql`SELECT 1 FROM reports WHERE kind = 'weekly' AND key = ${lastWeek}`;
     if (!w) {
       await composeWeekly(lastWeek, "catch-up");
@@ -287,7 +296,8 @@ export async function catchUpReports(now = new Date(), days = 7): Promise<{ gene
   const [y, mo, dd] = today.split("-").map(Number) as [number, number, number];
   const prevMonth = mo === 1 ? `${y - 1}-12` : `${y}-${String(mo - 1).padStart(2, "0")}`;
   const monthDue = dd > 1 || bjHour > 10 || (bjHour === 10 && Number(new Date(now.getTime() + 8 * 3600000).toISOString().slice(14, 16)) >= 30);
-  if (monthDue) {
+  const prevMonthEnd = addDays(`${today.slice(0, 7)}-01`, -1);
+  if (monthDue && !isBeforeLaunch(launch, prevMonthEnd)) {
     const [m] = await sql`SELECT 1 FROM reports WHERE kind = 'monthly' AND key = ${prevMonth}`;
     if (!m) {
       await composeMonthly(prevMonth, "catch-up");
