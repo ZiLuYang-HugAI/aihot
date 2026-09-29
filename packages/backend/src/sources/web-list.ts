@@ -15,8 +15,8 @@ export function parseLooseDate(value: string | null | undefined, utcOffset = "+0
   if (!v) return null;
   const direct = Date.parse(v);
   if (Number.isFinite(direct) && /\d{4}/.test(v)) return new Date(direct);
-  // 2026-09-26 / 2026/09/26 / 2026年9月26日 (+ optional time), interpreted in the given offset.
-  const m = /(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})日?(?:\s*(\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(v);
+  // 2026-09-26 / 2026/09/26 / 2026年9月26日 / 2026 年 09 月 26 日 (+ optional time), in the given offset.
+  const m = /(\d{4})\s*[-/.年]\s*(\d{1,2})\s*[-/.月]\s*(\d{1,2})\s*日?(?:\s*(\d{1,2}):(\d{2})(?::(\d{2}))?)?/.exec(v);
   if (m) {
     const [, y, mo, d, h = "00", mi = "00", s = "00"] = m;
     const iso = `${y}-${mo!.padStart(2, "0")}-${d!.padStart(2, "0")}T${h.padStart(2, "0")}:${mi}:${s}${utcOffset}`;

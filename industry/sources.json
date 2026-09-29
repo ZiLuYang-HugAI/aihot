@@ -756,6 +756,78 @@
       "tags": ["行业媒体", "氢能"],
       "site_fulltext": false,
       "syndicate_fulltext": false
+    },
+    {
+      "id": "web-cnenergynews-focus",
+      "name": "中国能源报 · 焦点关注",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.cnenergynews.cn/jdgz",
+        "itemSelector": "#listNews .item_info",
+        "linkSelector": "a",
+        "titleSelector": "h4",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.cnenergynews.cn/article/"],
+        "_aihot": { "initialBackfillLimit": 10 }
+      },
+      "tier": "T1_5",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": ["官方媒体", "电力"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-energytrend-news",
+      "name": "集邦新能源 · 产业资讯",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.energytrend.cn/news/",
+        "itemSelector": "article.type-post",
+        "linkSelector": "h2.entry-title a",
+        "titleSelector": "h2.entry-title a",
+        "publishedAtSelector": "span.newsdate",
+        "allowUrlPrefixes": ["https://www.energytrend.cn/news/"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "光伏", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ne21",
+      "name": "世纪新能源网 · 资讯",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.ne21.com/feed/rss.php?mid=21", "_aihot": { "initialBackfillLimit": 20 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "光伏", "风电", "储能", "氢能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-360estorage",
+      "name": "储能世界网",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.360estorage.com/feed/", "_aihot": { "initialBackfillLimit": 20 } },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "储能", "电池"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
     }
   ]
 }

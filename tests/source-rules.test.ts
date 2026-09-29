@@ -10,6 +10,7 @@ import { closeDb, sql } from "@aihot/backend/db";
 import { stopBoss } from "@aihot/backend/jobs/queue";
 import { extractArticleBody, readable } from "@aihot/backend/content/extract";
 import { collectSource } from "@aihot/backend/sources/collect";
+import { parseLooseDate } from "@aihot/backend/sources/web-list";
 import { updateSource } from "@aihot/backend/admin/sources";
 
 const T = tag();
@@ -142,6 +143,10 @@ test("detail HTML supplies the ordinary extracted body once, while short pages k
   assert.deepEqual([full!.body_html, full!.body_text, full!.body_status], [expected.html, expected.text, "ok"]);
   assert.equal(await extractArticleBody(full!.id, false), "skipped");
   assert.equal(pageReads.get(`/p/b-${T}`), 1, "known listings and extraction never download the same confirmed body again");
+});
+
+test("a Chinese date with spaces between its parts is read", () => {
+  assert.equal(parseLooseDate("2026 年 09 月 29 日 14:35")?.toISOString(), "2026-09-29T06:35:00.000Z");
 });
 
 test("a page that opens with a script before <head> is read, and only real lead images are kept", () => {
