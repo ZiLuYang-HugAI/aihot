@@ -266,7 +266,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -352,7 +352,7 @@
         "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -374,7 +374,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -440,7 +440,7 @@
         "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -462,7 +462,7 @@
         "allowUrlPrefixes": ["https://www.cpnn.com.cn/news/"],
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -484,7 +484,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -506,7 +506,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -550,7 +550,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -572,7 +572,7 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
@@ -594,12 +594,166 @@
         "detail": { "maxFetches": 30, "publishedAtSelector": ".info" },
         "_aihot": { "initialBackfillLimit": 20 }
       },
-      "tier": "T2",
+      "tier": "T1_5",
       "first_party": false,
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 180,
       "tags": ["媒体", "国际"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-power-grid",
+      "name": "中国能源网 · 电网",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/power/power-gird/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "电网"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-nuclear",
+      "name": "中国能源网 · 核电",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/power/nuclear-power/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["行业媒体", "核电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-hydro",
+      "name": "中国能源网 · 水电",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/power/hydro-power/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": ["行业媒体", "水电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-storage",
+      "name": "中国能源网 · 储能",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/new-energy/stored-energy/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "储能"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-solar",
+      "name": "中国能源网 · 光伏",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/new-energy/solar-power/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "光伏"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-wind",
+      "name": "中国能源网 · 风电",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/new-energy/wind-energy/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": ["行业媒体", "风电"],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "web-c5-hydrogen",
+      "name": "中国能源网 · 氢能",
+      "kind": "web_list",
+      "config": {
+        "url": "https://www.china5e.com/new-energy/hydrogen/",
+        "itemSelector": "ul.lista > li",
+        "linkSelector": "a",
+        "titleSelector": "a",
+        "publishedAtSelector": "span",
+        "allowUrlPrefixes": ["https://www.china5e.com/news/news-"],
+        "_aihot": { "initialBackfillLimit": 20 }
+      },
+      "tier": "T2",
+      "first_party": false,
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 240,
+      "tags": ["行业媒体", "氢能"],
       "site_fulltext": false,
       "syndicate_fulltext": false
     }
