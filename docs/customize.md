@@ -114,6 +114,8 @@
 - `install.sh`、`README.md`：安装脚本和人类说明。
 - 文件里的 `{{siteUrl}}` 和 `{{skillName}}` 由后端在发送时替换成 `SITE_URL` 和 `industry/site.ts` 的 `agentSkillName`；`manifest.sha256` 按替换后的内容现算，不用手写。
 
+`README.md` 里有两段「发给 Agent」的提示词（一句话安装、就地更新），`/agent` 页的 Skill 标签页也会渲染同一段安装提示词；改站名或 Skill 名时这几处文案要一起改。提示词让 Agent 去读 `README.md` 再执行，所以安装能力以 `README.md` 为准。
+
 改了 `agentSkillName` 或站名，要同步改这里的文案。`SKILL.md` frontmatter 里的 `version` 会显示在 `/agent` 页上。
 
 ## 10. 模型和部署

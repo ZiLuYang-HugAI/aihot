@@ -91,6 +91,12 @@ function SkillTab({ base }: { base: string }) {
       <h2 className="text-[20px] font-bold text-ink">装一份 Skill，Agent 就会查{withSubject("资讯")}</h2>
       <p className="mt-2 text-[14.5px] text-ink-3">适合 Claude Code、Codex、Gemini CLI、Copilot 等支持 Agent Skills 的工具。安装后 Agent 按 Skill 的默认路由查询本站的精选、热点与{withSubject("日报")}，匿名只读，不需要 API Key。</p>
       <CodeBlock
+        title="把这个发给你的 Agent（一句话安装）"
+        lang="text"
+        code={`请帮我安装 ${SITE.name} 的 Agent Skill：先读取 ${base}/${SKILL_NAME}-skill/README.md，严格按其中「手动安装」一节的说明，把 Skill 装到本机 Agent Skills 通用目录（不要用 sudo）；装完把安装路径、Skill 版本，以及一次验证请求的结果告诉我。`}
+      />
+      <p className="mt-6 text-[14.5px] text-ink-3">也可以自己跑命令，装到 <Mono>~/.agents/skills/{SKILL_NAME}</Mono>：</p>
+      <CodeBlock
         title="安装到 ~/.agents/skills"
         lang="bash"
         code={`# 通用目录（codex、gemini、copilot、opencode 兼容）\nbash <(curl -fsSL ${installer}) --target agents\n# Claude Code：安装到通用目录并建立兼容软链\nbash <(curl -fsSL ${installer}) --target claude`}

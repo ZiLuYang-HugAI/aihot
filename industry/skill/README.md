@@ -12,6 +12,16 @@
 - [安装包清单]({{siteUrl}}/{{skillName}}-skill/manifest.sha256)
 - [install.sh]({{siteUrl}}/{{skillName}}-skill/install.sh)
 
+## 让 Agent 自己安装
+
+把这个提示词原样发给你的 Agent（Claude Code、Codex、Cursor 等能读写文件和执行命令的 Agent 都适用）：
+
+```text
+请帮我安装 PowerAI Hot 的 Agent Skill。先读取 {{siteUrl}}/{{skillName}}-skill/README.md，严格按其中「手动安装」一节的说明，把 Skill 装到本机 Agent Skills 通用目录（不要用 sudo）；装完把安装路径、Skill 版本，以及一次验证请求的结果告诉我。
+```
+
+Agent 会自己下载 `install.sh`、逐文件校验 SHA-256、再把整包一次替换到位。Windows 原生环境同样用这段提示词，由 Agent 按本页说明处理，不要手动把 Bash 命令粘到 PowerShell。
+
 ## 手动安装
 
 以下 Bash 命令适用于 macOS、Linux 与 WSL。Windows 原生环境请让当前 Agent 按本页说明安装，不要把 Bash 命令直接粘贴到 PowerShell。脚本不会猜测平台，必须显式指定 `--target` 或 `--dir`，无参数只显示帮助并退出。
@@ -85,6 +95,12 @@ bash <(curl -fsSL {{siteUrl}}/{{skillName}}-skill/install.sh) \
 ## 更新
 
 本地 Skill 不会自动从远端更新。重新运行原来的 `--target` 或 `--dir` 命令即可；更新必须落在当前 Agent 实际加载的那一份上，装到别处只会多出一份副本。稳定 v1 内增加可选字段、后端抓取与排序优化，不要求更新 Skill；只有安全边界、触发范围或主工作流发生破坏性变化时才发布新版。
+
+也可以把下面这句发给**当前持有该 Skill 目录的 Agent**，由它就地更新：
+
+```text
+请用 {{siteUrl}}/{{skillName}}-skill/install.sh 就地更新你当前加载的 {{skillName}} Skill：先读 {{siteUrl}}/{{skillName}}-skill/README.md，确认要更新的目录正是你实际加载的那一份，再按其中命令执行；不要装出新副本，也不要用 sudo。
+```
 
 ## 能查询什么
 
